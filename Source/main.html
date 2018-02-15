@@ -1,0 +1,93 @@
+<!doctype html>
+<html ng-app="weather" ng-controller="weathercontroller">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script>
+        angular.module('weather', [])
+            .controller('weathercontroller', function($scope, $http) {
+                $scope.getWeather = function() {
+                    $http.get('https://api.wunderground.com/api/36b799dc821d5836/conditions/q/'+$scope.State+'/'+$scope.City+'.json').success(function(data)
+                    {
+                        console.log(data);
+                        $scope.weather = "Current temperature is : " + data.current_observation.temp_f + "F and " +  data.current_observation.weather + "";
+                        $scope.pressure = "Pressure :" + data.current_observation.pressure_mb;
+                        $scope.humidity = "Relative Humidity :" + data.current_observation.relative_humidity;
+                        $scope.wind = "Wind :" + data.current_observation.wind_mph + "mph";
+                        icon= data.current_observation.icon_url;
+                        $scope.currentIcon = {
+                            html: "<img source='" +icon + "'/>"
+                        }
+                        document.getElementById("currentIcon").innerHTML = "<img src='" + icon + "'/>";
+                    })
+                }
+            });
+
+    </script>
+    <script>
+        .weatherModule {
+            background-color: blue;
+            height: 150px;
+            width: 250px;
+            border: 1px solid powderblue;
+            padding: 1em;
+            margin: 50px;
+        }
+    </script>
+
+    <style>
+
+        body  {
+            background-image: url(http://all4desktop.com/data_images/original/4236532-background-images.jpg);
+            background-color: aliceblue;
+        }
+
+        .button {
+            background-color: #FFFFFF;
+            border: none;
+            color: black;
+            padding: 15px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .button {font-size: 15px;}
+
+    </style>
+    <ul class="main-nav nav navbar-nav navbar-right">
+        <li><a href="#Home">Home</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="results.html">Contact</a></li>
+        <li><a id="log" href="" onclick="Logout()">Logout</a></li>
+
+    </ul>
+</head>
+<body>
+<h1 align="center">Weather Details</h1>
+<div align = "center">
+                   <label>  Enter your State </label>
+    <br>
+    <input type="text" ng-model="State">
+    <br>
+    <label>Enter your City</label>
+    <br>
+    <input type="text" ng-model="City">
+    <br>
+    <br>
+    <button id="button1" ng-click="getWeather()">Show Weather</button>
+    <div class="weatherModule">
+        <p class="currentConditions" ng-bind="weather"></p>
+        <p class="currentPressure" ng-bind="pressure"></p>
+        <p class="currentHumidity" ng-bind="humidity"></p>
+        <p class="currentWind" ng-bind="wind"></p>
+        <div class="currentIcon" ng-bind-html-unsafe="currentIcon.html" id="currentIcon"></div>
+        <button class="button" id="button" ng-click="speech">Play</button> <label> To convert weather text to speech</label>
+
+    </div>
+
+</div>
+</body>
+</html>
